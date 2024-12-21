@@ -40,7 +40,7 @@
                 .then((userCredential) => {
                     const user = userCredential.user;
                     alert("Login successful!"); // Popup message
-                    window.location.assign("http://127.0.0.1:5500/student/student.html"); // Redirect to Google after successful login
+                    window.location.assign("http://127.0.0.1:5500/guard/index.html"); // Redirect to Google after successful login
                 })
                 .catch((error) => {
                     console.error("Login error:", error);  // Debugging
@@ -58,7 +58,7 @@
                 .then((result) => {
                     const user = result.user;
                     alert("Google login successful!"); // Popup message
-                    window.location.assign("http://127.0.0.1:5500/student/student.html"); // Redirect to Google after successful login
+                    window.location.assign("http://127.0.0.1:5500/guard/index.html"); // Redirect to Google after successful login
                 })
                 .catch((error) => {
                     console.error("Google login error:", error);  // Debugging
