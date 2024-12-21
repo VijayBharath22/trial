@@ -155,6 +155,8 @@ body.dark-mode .specialties .details {
   }
   .input-text {
     font-weight: bold;
+    margin-right: 3px;
+    margin-top: 8px;
   }
   .input-box {
     display: flex;
@@ -165,12 +167,16 @@ body.dark-mode .specialties .details {
     margin-top: 0.75em;
     /* width: 15em; */
   }
+  .input-box button{
+    margin-left: 10px;
+    margin-top: 7px;
+  }
   .stats {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-top: 1em;
-    padding-right: 5em;
+    margin-top: 0.5em;
+    padding-right: 1em;
     line-height: 1.7em;
     padding-left: 1px;
   }
