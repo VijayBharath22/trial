@@ -1,128 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MSRIT Libraries</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <link rel="stylesheet" href="/guard/style.css">
-   
-  </head>
-  <body>
-    <button id="theme-switcher" class="theme-switcher">
-      <i class="fas fa-sun"></i>
-    </button>
-    <div class="container">
-      <div class="header">MSRIT Libraries</div>
-      <div class="sub-header">Discover our world-class library facilities</div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MSRIT Libraries</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  />
+  <link rel="stylesheet" href="/guard/style.css">
 
-      <div class="card-container">
-        <div class="card">
-          <h3>LHC Library</h3>
-          <div class="seats">
-            Seats Occupied:
-            <span class="occupied">324</span> / <span class="total">538</span>
-          </div>
-          <canvas class="chart" id="lhcChart"></canvas>
-          <div class="specialties">
-            <strong>Specialties</strong>
-            <i class="fas fa-ellipsis-v"></i>
-            <div class="details">
-              <p>
-                <strong>Disciplines:</strong> "CS, IS, ECE, EEE, ITE, Medical
-                Ele, AI & ML, Cybersecurity, and AI & DS."
-              </p>
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
+    import { getDatabase, ref, onValue, push } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-analytics.js";
 
-              <p><strong>Digital Library:</strong> 61 Systems</p>
-              <p>
-                <strong>Facilities:</strong> Text & Reference Books, MSRIT Book
-                Bank, Bound Volumes of Journals, etc.
-              </p>
-            </div>
-          </div>
-          
-          <div class="stats">
-            <div>
-              <strong>Status:</strong>
-              <span class="status crowded">Crowded</span><br />
-            </div>
-            <div><strong>Location:</strong> LHC-11 2ND Level <br /></div>
-            <div><strong>Carpet Area:</strong> 495.83 Sq.mtrs</div>
-            <div><strong>Seating Capacity:</strong> 538</div>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7OLROtg6tVWaYOfNshTPWi7wSwez0Ah0",
+      authDomain: "crowdmapper-main.firebaseapp.com",
+      databaseURL: "https://crowdmapper-main-default-rtdb.firebaseio.com",
+      projectId: "crowdmapper-main",
+      storageBucket: "crowdmapper-main.appspot.com",
+      messagingSenderId: "839151952568",
+      appId: "1:839151952568:web:b67785df58d36ea2788a4d",
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const database = getDatabase(app);
+
+    // Function to fetch and display data
+    function fetchData() {
+      const libraries = ['LHC', 'APEX', 'ESB'];
+
+      libraries.forEach(library => {
+        const libraryRef = ref(database, libraries/${library});
+
+        // Listen for updates in real-time
+        onValue(libraryRef, (snapshot) => {
+          const data = snapshot.val();
+          const latestEntry = Object.values(data).reduce((latest, entry) => {
+            return entry.timestamp > latest.timestamp ? entry : latest;
+          }, { entered: 0, timestamp: 0 });
+
+          const occupied = latestEntry.entered || 0; // Use 'entered' from guard's data
+          const total = data.totalSeats || "Unknown"; // Fallback if totalSeats is missing
+          const timestamp = latestEntry.timestamp ? new Date(latestEntry.timestamp).toLocaleString() : "No timestamp";
+
+          // Update the DOM with the fetched data
+          document.querySelector(#${library.toLowerCase()}-library .occupied).innerText = occupied;
+          document.querySelector(#${library.toLowerCase()}-library .total).innerText = total;
+          document.querySelector(#${library.toLowerCase()}-library .timestamp).innerText = timestamp;
+
+          // Optionally, calculate crowd status
+          const status = document.querySelector(#${library.toLowerCase()}-library .status);
+          if (total !== "Unknown" && occupied / total > 0.8) {
+            status.innerText = "Crowded";
+            status.classList.add('crowded');
+            status.classList.remove('active');
+          } else {
+            status.innerText = "Active";
+            status.classList.add('active');
+            status.classList.remove('crowded');
+          }
+        });
+      });
+    }
+
+    // Function to submit feedback
+    window.submitFeedback = function submitFeedback(library) {
+      const feedbackInput = document.getElementById(library.toLowerCase() + '-feedback');
+      const feedbackValue = feedbackInput.value;
+
+      if (feedbackValue) {
+        const libraryRef = ref(database, 'libraries/' + library);
+        push(libraryRef, {
+          entered: parseInt(feedbackValue, 10),
+          timestamp: Date.now(), // Use UNIX timestamp
+        })
+          .then(() => {
+            alert('Feedback submitted successfully!');
+            feedbackInput.value = ''; // clear the input field
+          })
+          .catch((error) => {
+            console.error('Error submitting feedback:', error);
+          });
+      } else {
+        alert('Please enter a valid number of students.');
+      }
+    };
+
+    // Fetch data on page load
+    window.onload = fetchData;
+  </script>
+</head>
+<body>
+  <button id="theme-switcher" class="theme-switcher">
+    <i class="fas fa-sun"></i>
+  </button>
+  <div class="container">
+    <div class="header">MSRIT Libraries</div>
+    <div class="sub-header">Discover our world-class library facilities</div>
+
+    <div class="card-container">
+      <div class="card" id="lhc-library">
+        <h3>LHC Library</h3>
+        <div class="seats">
+          Seats Occupied:
+          <span class="occupied">Loading...</span> / <span class="total">Loading...</span>
+          <br />
+          <small>Last updated: <span class="timestamp">Loading...</span></small>
+        </div>
+        <canvas class="chart" id="lhcChart"></canvas>
+        <div class="specialties">
+          <strong>Specialties</strong>
+          <i class="fas fa-ellipsis-v"></i>
+          <div class="details">
+            <p>
+              <strong>Disciplines:</strong> "CS, IS, ECE, EEE, ITE, Medical
+              Ele, AI & ML, Cybersecurity, and AI & DS."
+            </p>
+            <p><strong>Digital Library:</strong> 61 Systems</p>
+            <p>
+              <strong>Facilities:</strong> Text & Reference Books, MSRIT Book
+              Bank, Bound Volumes of Journals, etc.
+            </p>
           </div>
         </div>
-
-        <div class="card">
-          <h3>APEX Library</h3>
-          <div class="seats">
-            Seats Occupied:
-            <span class="occupied">45</span> / <span class="total">64</span>
+        <div class="stats">
+          <div>
+            <strong>Status:</strong>
+            <span class="status crowded">Crowded</span><br />
           </div>
-          <canvas class="chart" id="apexChart"></canvas>
-          <div class="specialties">
-            <strong>Specialties</strong>
-            <i class="fas fa-ellipsis-v"></i>
-            <div class="details">
-              <p>
-                <strong>Disciplines:</strong> Mathematics, Chemistry, Physics,
-                Other Basic Engg. & Humanities Books for First year.
-              </p>
+          <div><strong>Location:</strong> LHC-11 2ND Level <br /></div>
+          <div><strong>Carpet Area:</strong> 495.83 Sq.mtrs</div>
+          <div><strong>Seating Capacity:</strong> 538</div>
+        </div>
+      </div>
 
-              <p><strong>Digital Library:</strong> 02 Systems</p>
-            </div>
-          </div>
-           
-          <div class="stats">
-            <div>
-              <strong>Status:</strong>
-              <span class="status active">Active</span><br />
-            </div>
-            <div><strong>Location:</strong> Apex block, 5th Level <br /></div>
-            <div><strong>Carpet Area:</strong> 200.94 Sq.mtrs</div>
-            <div><strong>Seating Capacity:</strong> 64</div>
+      <div class="card" id="apex-library">
+        <h3>APEX Library</h3>
+        <div class="seats">
+          Seats Occupied:
+          <span class="occupied">Loading...</span> / <span class="total">Loading...</span>
+          <br />
+          <small>Last updated: <span class="timestamp">Loading...</span></small>
+        </div>
+        <canvas class="chart" id="apexChart"></canvas>
+        <div class="specialties">
+          <strong>Specialties</strong>
+          <i class="fas fa-ellipsis-v"></i>
+          <div class="details">
+            <p>
+              <strong>Disciplines:</strong> Mathematics, Chemistry, Physics,
+              Other Basic Engg. & Humanities Books for First year.
+            </p>
+            <p><strong>Digital Library:</strong> 02 Systems</p>
           </div>
         </div>
+        <div class="stats">
+          <div>
+            <strong>Status:</strong>
+            <span class="status active">Active</span><br />
+          </div>
+          <div><strong>Location:</strong> Apex block, 5th Level <br /></div>
+          <div><strong>Carpet Area:</strong> 200.94 Sq.mtrs</div>
+          <div><strong>Seating Capacity:</strong> 64</div>
+        </div>
+      </div>
 
-        <div class="card">
-          <h3>ESB Library</h3>
-          <div class="seats">
-            Seats Occupied:
-            <span class="occupied">412</span> / <span class="total">538</span>
+      <div class="card" id="esb-library">
+        <h3>ESB Library</h3>
+        <div class="seats">
+          Seats Occupied:
+          <span class="occupied">Loading...</span> / <span class="total">Loading...</span>
+          <br />
+          <small>Last updated: <span class="timestamp">Loading...</span></small>
+        </div>
+        <canvas class="chart" id="esbChart"></canvas>
+        <div class="specialties">
+          <strong>Specialties</strong>
+          <i class="fas fa-ellipsis-v"></i>
+          <div class="details">
+            <p>
+              <strong>Disciplines:</strong> Departments of Civil Engg,
+              Mechanical Engg, Chemical Engg, Industrial Engg & Biotechnology
+            </p>
+            <p><strong>Digital Library:</strong> 60 TFT Monitor Systems</p>
+            <p>
+              <strong>Facilities:</strong> "Books, Journals, Magazines,
+              Newspapers, GATE, SC/ST Book Bank, and Member Registration."
+            </p>
           </div>
-          <canvas class="chart" id="esbChart"></canvas>
-          <div class="specialties">
-            <strong>Specialties</strong>
-            <i class="fas fa-ellipsis-v"></i>
-            <div class="details">
-              <p>
-                <strong>Disciplines:</strong> Departments of Civil Engg,
-                Mechanical Engg, Chemical Engg, Industrial Engg & Biotechnology
-              </p>
-
-              <p><strong>Digital Library:</strong> 60 TFT Monitor Systems</p>
-              <p>
-                <strong>Facilities:</strong> "Books, Journals, Magazines,
-                Newspapers, GATE, SC/ST Book Bank, and Member Registration."
-              </p>
-            </div>
+        </div>
+        <div class="stats">
+          <div>
+            <strong>Status:</strong>
+            <span class="status crowded">Crowded</span><br />
           </div>
-          
-          <div class="stats">
-            <div>
-              <strong>Status:</strong>
-              <span class="status crowded">Crowded</span><br />
-            </div>
-            <div><strong>Location:</strong> ESB-11 4TH Level<br /></div>
-            <div><strong>Carpet Area:</strong> 791.84 Sq.mtrs</div>
-            <div><strong>Seating Capacity:</strong> 538</div>
-          </div>
+          <div><strong>Location:</strong> ESB-11 4TH Level<br /></div>
+          <div><strong>Carpet Area:</strong> 791.84 Sq.mtrs</div>
+          <div><strong>Seating Capacity:</strong> 538</div>
         </div>
       </div>
     </div>
-<script src="/guard/script.js"></script>
-  </body>
+  </div>
+  <script src="/guard/script.js"></script>
+</body>
 </html>
