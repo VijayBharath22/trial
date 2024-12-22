@@ -1,257 +1,44 @@
 
 body {
-    font-family: Arial, sans-serif;
-    background: url("https://wallpapers.com/images/hd/library-background-zp3y3gk7am2pnsar.jpg")
-      no-repeat center center fixed;
-    background-size: cover;
-    margin: 0;
-    color: #333;
-    overflow-x: hidden;
-  }
- 
-  
-  canvas {
-    background-color: transparent; /* Keep the chart area transparent */
-  }
-  
-
-  .container {
-    text-align: center;
-    padding: 20px;
-    color: #4a4a4a;
-  }
-
-  .header {
-    font-size: 4.5rem;
-    font-family: sans-serif;
-    font-weight: 550;
-    margin-bottom: 10px;
-    animation: text-shimmer 2s ease-in-out infinite;
-    background-image: linear-gradient(
-      45deg,
-      rgb(5, 248, 236),
-      rgb(27, 237, 136),
-      rgb(252, 250, 132)
-    );
-    background-size: 300% 300%;
-    -webkit-background-clip: text;
-    color: transparent;
-  }
-
-  @keyframes text-shimmer {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-
-  .sub-header {
-    font-size: 1.3rem;
-    margin-bottom: 40px;
-    color: rgb(250, 239, 215);
-  }
-
-  .card-container {
-    display: flex;
-    justify-content: space-around;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  .card {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(5px);
-    border-radius: 10px;
-    padding: 20px;
-    width: 350px;
-    height: 490px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-  }
-
-  .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
-
-  .card h3 {
-    margin: 0 0 20px;
-    font-weight: bolder;
-    font-size: 1.35rem;
-  }
-
-  .seats {
-    font-size: 1.1rem;
-    margin: 10px 0;
-    color: black;
-  }
-
-  .occupied {
-    color: grey;
-  }
-
-  .total {
-    color: black;
-  }
-
-  .chart {
-    margin: 20px 0;
-    /* height: 10px; */
-    /* width: 100%; */
-  }
-
-  .specialties {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    cursor: pointer;
-  }
-
-  /* Details box style - light mode */
-.specialties .details {
-  display: none;
-  position: absolute;
-  top: 80%;
-  left: 55%;
-  background: rgba(255, 255, 255, 0.8); /* Match card background */
-  backdrop-filter: blur(5px); /* Consistent with card */
-  color: #333; /* Default text color */
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 200;
-  width: 250px;
-  margin-left: 5px;
-}
-
-/* Light mode styles */
-
-
-/* Dark mode styles */
-body.dark-mode .specialties .details {
-  background: rgba(50, 50, 50, 0.9); /* Match dark mode card background */
-  color: #ffffff; /* White text in dark mode */
-}
-
-  .status {
-    font-size: 1rem;
-    font-weight: bold;
-  }
-
-  .status.crowded {
-    color: red;
-  }
-
-  .status.active {
-    color: purple;
-  }
-  .input-text {
-    font-weight: bold;
-  }
-  .input-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.95em;
-    width: 100%;
-    margin-top: 0.75em;
-    /* width: 15em; */
-  }
-  .stats {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin-top: 1em;
-    padding-right: 5em;
-    line-height: 1.7em;
-    padding-left: 1px;
-  }
-
-  .stats div {
-    display: flex;
-    font-size: 1.05em;
-    justify-content: space-between;
-  }
-
-  @media (max-width: 768px) {
-    .card-container {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-  .card-container .card:nth-child(3) .details {
-    left: auto;
-    right: 0%;
-    /* top: 60%; */
-
-  }
-
-/* Remove the white background in light mode */
-body.light-mode {
-  background: url("https://wallpapers.com/images/hd/library-background-zp3y3gk7am2pnsar.jpg") no-repeat center center fixed;
+  font-family: Arial, sans-serif;
+  background: url("https://wallpapers.com/images/hd/library-background-zp3y3gk7am2pnsar.jpg")
+    no-repeat center center fixed;
   background-size: cover;
+  margin: 0;
   color: #333;
-}
-
-/* Dark mode styles */
-
-body.dark-mode {
-  background: url("https://wallpapers.com/images/hd/library-background-zp3y3gk7am2pnsar.jpg") no-repeat center center fixed;
-  background-size: cover;
-  color: #e0e0e0;
-  background-blend-mode: overlay;
-  background-color: rgba(0, 0, 0, 0.4); /* Slight dimmer effect (not too dark) */
-}
-#theme-switcher {
-  font-size: 1.3rem; /* Increase the icon size */
-  padding: 5px 8px 3px 8px; /* Add some padding to create space inside the circle */
-  border-radius: 50%; /* Make the button circular */
-  background-color: rgba(255, 255, 255, 0.7); /* Light background for the button */
-  border: none; /* Remove default border */
-  color: #333; /* Icon color */
-  position: fixed; /* Fixed position in top left */
-  top: 20px; /* Adjust position from the top */
-  left: 20px; /* Adjust position from the left */
-  cursor: pointer; /* Make it clickable */
-  transition: transform 0.3s ease; /* Add a smooth hover effect */
-}
-
-#theme-switcher:hover {
-  transform: scale(1.1); /* Slightly enlarge the icon on hover */
-  background-color: rgba(255, 255, 255, 0.9); /* Darker background on hover */
+  overflow-x: hidden;
 }
 
 
-
-body.dark-mode .card {
-  background: rgba(50, 50, 50, 0.9); /* Darker card background */
-  color: #ffffff;
+canvas {
+  background-color: transparent; /* Keep the chart area transparent */
 }
 
-body.dark-mode .header {
-  animation: text-shimmer-white 2s ease-in-out infinite;
-  background-image: linear-gradient(45deg, #d0e97f, #64e4e0, #ffffff);
+
+.container {
+  text-align: center;
+  padding: 20px;
+  color: #4a4a4a;
 }
 
-body.dark-mode .seats,
-body.dark-mode .occupied,
-body.dark-mode .total {
-  color: #ffffff; /* Seat ratio and text in white */
+.header {
+  font-size: 4.5rem;
+  font-family: sans-serif;
+  font-weight: 550;
+  margin-bottom: 10px;
+  animation: text-shimmer 2s ease-in-out infinite;
+  background-image: linear-gradient(
+    45deg,
+    rgb(5, 248, 236),
+    rgb(27, 237, 136),
+    rgb(252, 250, 132)
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
-body.dark-mode .chart-container .chart-axis {
-  color: #ffffff !important; /* Chart axis text color */
-}
-
-@keyframes text-shimmer-white {
+@keyframes text-shimmer {
   0% {
     background-position: 0% 50%;
   }
@@ -263,3 +50,221 @@ body.dark-mode .chart-container .chart-axis {
   }
 }
 
+.sub-header {
+  font-size: 1.3rem;
+  margin-bottom: 40px;
+  color: rgb(250, 239, 215);
+}
+
+.card-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+  border-radius: 10px;
+  padding: 20px;
+  width: 350px;
+  height: 490px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card h3 {
+  margin: 0 0 20px;
+  font-weight: bolder;
+  font-size: 1.35rem;
+}
+
+.seats {
+  font-size: 1.1rem;
+  margin: 10px 0;
+  color: black;
+}
+
+.occupied {
+  color: grey;
+}
+
+.total {
+  color: black;
+}
+
+.chart {
+  margin: 20px 0;
+  /* height: 10px; */
+  /* width: 100%; */
+}
+
+.specialties {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+/* Details box style - light mode */
+.specialties .details {
+display: none;
+position: absolute;
+top: 80%;
+left: 55%;
+background: rgba(255, 255, 255, 0.8); /* Match card background */
+backdrop-filter: blur(5px); /* Consistent with card */
+color: #333; /* Default text color */
+border: 1px solid #ddd;
+padding: 10px;
+border-radius: 5px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+z-index: 200;
+width: 250px;
+margin-left: 5px;
+}
+
+/* Light mode styles */
+
+
+/* Dark mode styles */
+body.dark-mode .specialties .details {
+background: rgba(50, 50, 50, 0.9); /* Match dark mode card background */
+color: #ffffff; /* White text in dark mode */
+}
+
+.status {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.status.crowded {
+  color: red;
+}
+
+.status.active {
+  color: purple;
+}
+.input-text {
+  font-weight: bold;
+  margin-right: 3px;
+  margin-top: 8px;
+}
+.input-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95em;
+  width: 100%;
+  margin-top: 0.75em;
+  /* width: 15em; */
+}
+.input-box button{
+  margin-left: 10px;
+  margin-top: 7px;
+}
+.stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 0.5em;
+  padding-right: 1em;
+  line-height: 1.7em;
+  padding-left: 1px;
+}
+
+.stats div {
+  display: flex;
+  font-size: 1.05em;
+  justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+  .card-container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+.card-container .card:nth-child(3) .details {
+  left: auto;
+  right: 0%;
+  /* top: 60%; */
+
+}
+
+/* Remove the white background in light mode */
+body.light-mode {
+background: url("https://wallpapers.com/images/hd/library-background-zp3y3gk7am2pnsar.jpg") no-repeat center center fixed;
+background-size: cover;
+color: #333;
+}
+
+/* Dark mode styles */
+
+body.dark-mode {
+background: url("https://wallpapers.com/images/hd/library-background-zp3y3gk7am2pnsar.jpg") no-repeat center center fixed;
+background-size: cover;
+color: #e0e0e0;
+background-blend-mode: overlay;
+background-color: rgba(0, 0, 0, 0.4); /* Slight dimmer effect (not too dark) */
+}
+#theme-switcher {
+font-size: 1.3rem; /* Increase the icon size */
+padding: 5px 8px 3px 8px; /* Add some padding to create space inside the circle */
+border-radius: 50%; /* Make the button circular */
+background-color: rgba(255, 255, 255, 0.7); /* Light background for the button */
+border: none; /* Remove default border */
+color: #333; /* Icon color */
+position: fixed; /* Fixed position in top left */
+top: 20px; /* Adjust position from the top */
+left: 20px; /* Adjust position from the left */
+cursor: pointer; /* Make it clickable */
+transition: transform 0.3s ease; /* Add a smooth hover effect */
+}
+
+#theme-switcher:hover {
+transform: scale(1.1); /* Slightly enlarge the icon on hover */
+background-color: rgba(255, 255, 255, 0.9); /* Darker background on hover */
+}
+
+
+
+body.dark-mode .card {
+background: rgba(50, 50, 50, 0.9); /* Darker card background */
+color: #ffffff;
+}
+
+body.dark-mode .header {
+animation: text-shimmer-white 2s ease-in-out infinite;
+background-image: linear-gradient(45deg, #d0e97f, #64e4e0, #ffffff);
+}
+
+body.dark-mode .seats,
+body.dark-mode .occupied,
+body.dark-mode .total {
+color: #ffffff; /* Seat ratio and text in white */
+}
+
+body.dark-mode .chart-container .chart-axis {
+color: #ffffff !important; /* Chart axis text color */
+}
+
+@keyframes text-shimmer-white {
+0% {
+  background-position: 0% 50%;
+}
+50% {
+  background-position: 100% 50%;
+}
+100% {
+  background-position: 0% 50%;
+}
+}
